@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Pilgrimage Routes of India</title>
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+  <link href="https://api.mapbox.com/mapbox-gl-js/v3.18.1/mapbox-gl.css" rel="stylesheet">
+  <script src="https://api.mapbox.com/mapbox-gl-js/v3.18.1/mapbox-gl.js"></script>
+  <script src="https://unpkg.com/@mapbox/togeojson"></script>
+  <style>
+    body { margin: 0; padding: 0; }
+    #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+    #controls {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background: white;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      z-index: 1;
+      font-family: Arial, sans-serif;
+    }
+    #controls h3 {
+      margin: 0 0 10px 0;
+      font-size: 14px;
+      color: #333;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 8px 12px;
+      margin: 5px 0;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: bold;
+      color: white;
+      text-align: left;
+      transition: opacity 0.2s;
+    }
+    .btn:hover { opacity: 0.85; }
+    .wari      { background-color: #ff6b35; }
+    .vraja     { background-color: #4a90d9; }
+    .girnar    { background-color: #27ae60; }
+    .sabrimala { background-color: #8e44ad; }
+    .all       { background-color: #555; }
+  </style>
+</head>
+<body>
+
+  <div id="map"></div>
+
+  <div id="controls">
+    <h3>Pilgrimage Routes</h3>
+    <button onclick="highlightRoute('wari')"      class="btn wari">Pandharpur Wari</button>
+    <button onclick="highlightRoute('vraja')"     class="btn vraja">Vraja Mandala Parikrama</button>
+    <button onclick="highlightRoute('girnar')"    class="btn girnar">Girnar Lili Parikrama</button>
+    <button onclick="highlightRoute('sabrimala')" class="btn sabrimala">Sabrimala Periya Pathai</button>
+    <button onclick="highlightRoute('all')"       class="btn all">Show All</button>
+  </div>
+
+  <script>
+    mapboxgl.accessToken = 'pk.eyJ1Ijoic2hyYXZhbmktcyIsImEiOiJjbWtib3VkczgwMjJ6M2ZzN2dvaDhmaW81In0.CEn0sZvMn0xh1DYA0G9rrA';
+
+    const map = new mapboxgl.Map({
+      container: 'map',
+      style: 'mapbox://styles/mapbox/light-v11',
+      center: [78.0, 22.0],
+      zoom: 5
+    });
+
+    const routes = [
+      {
+        id: 'wari',
+        name: 'Pandharpur Wari',
+        color: '#ff6b35',
+        gpxUrl: 'https://raw.githubusercontent.com/Shravaniii1508/wari-assets/main/export%20(2).gpx'
+      },
+      {
+        id: 'vraja',
+        name: 'Vraja Mandala Parikrama',
+        color: '#4a90d9',
+        gpxUrl: 'https://raw.githubusercontent.com/Shravaniii1508/wari-assets/main/vraja%20mandala.gpx'
+      },
+      {
+        id: 'girnar',
+        name: 'Girnar Lili Parikrama',
+        color: '#27ae60',
+        gpxUrl: 'https://raw.githubusercontent.com/Shravaniii1508/wari-assets/main/girnar.gpx'
+      },
+      {
+        id: 'sabrimala',
+        name: 'Sabrimala Periya Pathai',
+        color: '#8e44ad',
+        gpxUrl: 'https://raw.githubusercontent.com/Shravaniii1508/wari-assets/main/sabarimala.gpx'
+      }
+    ];
+
+    const ACTIVE_OPACITY = 1.0;
+    const FADED_OPACITY  = 0.15;
+
+    map.on('load', () => {
+      routes.forEach(route => {
+        fetch(route.gpxUrl)
+          .then(response => response.text())
+          .then(gpxText => {
+            const parser = new DOMParser();
+            const gpx = parser.parseFromString(gpxText, 'text/xml');
+            const geojson = toGeoJSON.gpx(gpx);
+            map.addSource(route.id, { type: 'geojson', data: geojson });
+            map.addLayer({
+              id: `${route.id}-line`,
+              type: 'line',
+              source: route.id,
+              paint: {
+                'line-color': route.color,
+                'line-width': 3,
+                'line-opacity': 1.0
+              }
+            });
+          })
+          .catch(error => console.error(`Error loading ${route.name}:`, error));
+      });
+    });
+
+    function highlightRoute(activeId) {
+      routes.forEach(route => {
+        const layerId = `${route.id}-line`;
+        if (!map.getLayer(layerId)) return;
+        if (activeId === 'all') {
+          map.setPaintProperty(layerId, 'line-opacity', ACTIVE_OPACITY);
+          map.setPaintProperty(layerId, 'line-width', 3);
+        } else if (route.id === activeId) {
+          map.setPaintProperty(layerId, 'line-opacity', ACTIVE_OPACITY);
+          map.setPaintProperty(layerId, 'line-width', 5);
+        } else {
+          map.setPaintProperty(layerId, 'line-opacity', FADED_OPACITY);
+          map.setPaintProperty(layerId, 'line-width', 2);
+        }
+      });
+    }
+  </script>
+
+</body>
+</html>
