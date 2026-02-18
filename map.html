@@ -249,6 +249,7 @@
     function highlightRoute(activeId) {
       routes.forEach(route => {
         const layerId = `${route.id}-line`;
+
         if (!map.getLayer(layerId)) return;
 
         if (activeId === 'all') {
@@ -270,6 +271,10 @@
           duration: 1500,
           essential: true
         });
+        
+        const existing = document.getElementById('info-panel');
+        if (existing) existing.remove();
+        
       } else {
         const source = map.getSource(activeId);
         if (source) {
@@ -296,6 +301,13 @@
               duration: 1500,
               maxZoom: 10
             });
+
+            setTimeout(() => {
+              const info = routeInfo[activeId];
+              if (info) {
+                showInfoPanel(info);
+              }
+            }, 1600);
           }
         }
       }
