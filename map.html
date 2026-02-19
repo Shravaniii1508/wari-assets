@@ -23,17 +23,17 @@
       position: absolute;
       top: 20px;
       left: 20px;
-      background: white;
+      background: transparent;
       padding: 15px;
+      border: 1px solid white;
       border-radius: 10px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
       z-index: 1;
       font-family: Arial, sans-serif;
     }
     #controls h3 {
       margin: 0 0 10px 0;
       font-size: 14px;
-      color: #333;
+      color: white;
       text-transform: uppercase;
       letter-spacing: 1px;
     }
@@ -47,18 +47,18 @@
       cursor: pointer;
       font-size: 13px;
       font-weight: bold;
-      color: white;
+      color: #ffffff;
       text-align: left;
       transition: opacity 0.2s;
     }
     .btn:hover {
       opacity: 0.85;
     }
-    .wari      { background-color: #ff6b35; }
-    .vraja     { background-color: #4a90d9; }
-    .girnar    { background-color: #27ae60; }
-    .sabrimala { background-color: #8e44ad; }
-    .all       { background-color: #555; }
+    .vraja     { background-color: #b42929; }
+    .girnar    { background-color: #427039; }
+    .sabrimala { background-color: #8c5422; }
+    .wari      { background-color: #f2a41e; }
+    .all       { background-color: #555; color: white; }
     
     #info-panel {
       position: absolute;
@@ -67,7 +67,7 @@
       width: 320px;
       max-height: 80vh;
       overflow-y: auto;
-      background: white;
+      background: black;
       border-radius: 12px;
       box-shadow: 0 4px 20px rgba(0,0,0,0.25);
       z-index: 2;
@@ -112,18 +112,19 @@
       margin-bottom: 10px;
     }
     #info-badges span {
-      background: #f0f0f0;
+      background: none;
+      border: 1px solid white;
       padding: 4px 10px;
       border-radius: 20px;
       font-size: 12px;
-      color: #555;
+      color: white;
     }
     .info-section {
       margin-bottom: 12px;
     }
     .info-section strong {
       display: block;
-      color: #333;
+      color: #ffffff;
       font-size: 12px;
       margin-bottom: 4px;
       text-transform: uppercase;
@@ -132,7 +133,7 @@
     .info-section p {
       margin: 0;
       font-size: 13px;
-      color: #555;
+      color: #bfbfbf;
       line-height: 1.5;
     }
     .sources {
@@ -170,10 +171,10 @@
   
   <div id="controls">
     <h3>Pilgrimage Routes</h3>
-    <button onclick="highlightRoute('wari')" class="btn wari">Pandharpur Wari</button>
     <button onclick="highlightRoute('vraja')" class="btn vraja">Vraja Mandala Parikrama</button>
     <button onclick="highlightRoute('girnar')" class="btn girnar">Girnar Lili Parikrama</button>
     <button onclick="highlightRoute('sabrimala')" class="btn sabrimala">Sabrimala Periya Pathai</button>
+    <button onclick="highlightRoute('wari')" class="btn wari">Pandharpur Wari</button>
     <button onclick="highlightRoute('all')" class="btn all">Show All</button>
   </div>
 
@@ -182,34 +183,34 @@
 
     const map = new mapboxgl.Map({
       container: 'map',
-      style: 'mapbox://styles/mapbox/dark-v11',
+      style:'mapbox://styles/mapbox/dark-v11',
       center: [78.0, 22.0],
-      zoom: 5
+      zoom: 4
     });
 
     const routes = [
       {
         id: 'wari',
         name: 'Pandharpur Wari',
-        color: '#ff6b35',
+        color: '#f2a41e',
         gpxUrl: 'https://raw.githubusercontent.com/Shravaniii1508/wari-assets/refs/heads/main/export%20(2).gpx'
       },
       {
         id: 'vraja',
         name: 'Vraja Mandala Parikrama',
-        color: '#4a90d9',
+        color: '#b42929',
         gpxUrl: 'https://raw.githubusercontent.com/Shravaniii1508/wari-assets/refs/heads/main/vraja%20mandala.gpx'
       },
       {
         id: 'girnar',
         name: 'Girnar Lili Parikrama',
-        color: '#27ae60',
+        color: '#427039',
         gpxUrl: 'https://raw.githubusercontent.com/Shravaniii1508/wari-assets/refs/heads/main/girnar.gpx'
       },
       {
         id: 'sabrimala',
         name: 'Sabrimala Periya Pathai',
-        color: '#8e44ad',
+        color: '#8c5422',
         gpxUrl: 'https://raw.githubusercontent.com/Shravaniii1508/wari-assets/refs/heads/main/sabarimala.gpx'
       }
     ];
@@ -327,7 +328,7 @@
           { text: 'Official Wari Website', url: 'https://example.com' },
           { text: 'Wikipedia', url: 'https://en.wikipedia.org/wiki/Wari' }
         ],
-        color: '#ff6b35'
+        color: '#f2a41e'
       },
       'vraja': {
         title: 'Vraja Mandala Parikrama',
@@ -342,7 +343,7 @@
           { text: 'ISKCON Guide', url: 'https://example.com' },
           { text: 'Braj Foundation', url: 'https://example.com' }
         ],
-        color: '#4a90d9'
+        color: '#b42929'
       },
       'girnar': {
         title: 'Girnar Lili Parikrama',
@@ -357,7 +358,7 @@
           { text: 'Gujarat Tourism', url: 'https://example.com' },
           { text: 'Jain Pilgrimage Guide', url: 'https://example.com' }
         ],
-        color: '#27ae60'
+        color: '#427039'
       },
       'sabrimala': {
         title: 'Sabrimala Periya Pathai',
@@ -372,7 +373,7 @@
           { text: 'Sabarimala Official', url: 'https://www.sabarimalatemple.org' },
           { text: 'Kerala Tourism', url: 'https://example.com' }
         ],
-        color: '#8e44ad'
+        color: '#8c5422'
       }
     };
 
@@ -422,27 +423,27 @@
           </div>
           
           <div class="info-section">
-            <strong>📍 Location:</strong>
+            <strong> Location:</strong>
             <p>${info.location}</p>
           </div>
           
           <div class="info-section">
-            <strong>📅 Annual Date:</strong>
+            <strong> Annual Date:</strong>
             <p>${info.annualDate}</p>
           </div>
           
           <div class="info-section">
-            <strong>📖 About:</strong>
+            <strong> About:</strong>
             <p>${info.description}</p>
           </div>
           
           <div class="info-section">
-            <strong>🚶 Routine:</strong>
+            <strong> Routine:</strong>
             <p>${info.routine}</p>
           </div>
           
           <div class="info-section">
-            <strong>🔗 Sources:</strong>
+            <strong> Sources:</strong>
             <div class="sources">${sourcesHTML}</div>
           </div>
         </div>
